@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+
+Images | {{ request.user.username }}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{% if not images %}No images{% else %}Images{% endif %}</h1>
+<br>
+
+<div class="row row-cols-3">
+  {% for image in images %}
+    <div class="row">
+      <div class="col">
+        {% load thumbnail %}
+          <a href="{{ image.get_absolute_url }}">
+            {% thumbnail image.photo "180x300" crop="100%" as im %}
+            <img src="{{ im.url }}">
+          </a>
+        {% endthumbnail %}
+        <a href="{{ image.get_absolute_url }}">
+          <h4>{{ image.title }}</h4>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+ 
+<a href="{% url 'image_post' %}" class="btn btn-success btn-sm">Post new image</a>
+
+<style type="text/css">
+  
+  .row{
+    margin-top: 10px;
+    margin-bottom: 100px;
+  }
+</style>
+
+{% endblock %}
+

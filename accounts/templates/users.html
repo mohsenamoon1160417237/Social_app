@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+People | {{ request.user.username }}
+{% endblock %}
+
+{% block content %}
+<h1>People</h1>
+<br>
+
+	<div class="row row-cols-3">
+
+	{% for user in users %}
+	  <div class="row">
+	  	<div class="col">
+	  {% load thumbnail %}
+	    <a href="{{ user.get_absolute_url }}">
+	      {% thumbnail user.profile.image "250x250" crop="100%" as im %}
+	      <img src="{{ im.url }}" class="rounded-circle">
+	    </a>
+	    <a href="{{ user.get_absolute_url }}">
+	      <h5>{{ user.username }}</h5>
+	    </a>
+	  {% endthumbnail %}
+	</div>
+	</div>
+	{% endfor %}
+	</div>
+
+	<style type="text/css">
+	  .row{
+	  	margin-top: 10px;
+	  	margin-bottom: 20px;
+	  }
+	</style>
+
+{% endblock %}

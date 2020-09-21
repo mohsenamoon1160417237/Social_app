@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Post image
+{% endblock %}
+
+
+{% block content %}
+<h1>Post image</h1>
+<br>
+<div class="card card-body">
+	<form action="." method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{% for field in form %}
+		  <div>
+		  	{{ field.label_tag }}<br>
+		  	{{ field }}
+		  	{{ field.errors }}
+		  </div>
+		{% endfor %}
+		<br>
+		<input type="submit" value="Post" class="btn btn-success btn-sm">
+	</form>
+</div>
+
+
+{% endblock %}

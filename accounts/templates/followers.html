@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Followers
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Followers</h1>
+<hr>
+<div class="row row-cols-3">
+	{% for follower in followers %}
+	  <div class="row">
+	  	<div class="col">
+	  {% load thumbnail %}
+	    <a href="{{ follower.get_absolute_url }}">
+	      {% thumbnail follower.profile.image "200x200" crop="100%" as im %}
+	      <img src="{{ im.url }}" class="rounded-circle">
+	    </a>
+	  {% endthumbnail %}
+	  <a href="{{ follower.get_absolute_url }}">
+	    <p>{{ follower.username }}</p>
+	  </a>
+	  <form action="{% url 'remove_follower' follower.username %}" method="post">
+	  	{% csrf_token %}
+	  	<input type="submit" value="Remove follower" class="btn btn-primary btn-sm">
+	  </form>
+	  </div>
+	</div>
+	{% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Most liked images
+{% endblock %}
+
+
+{% block content %}
+<h1>Best images</h1>
+<hr>
+<br>
+<div class="row row-cols-3">
+	{% for image in images %}
+	  <div class="row">
+	  	<div class="col">
+	  	  {% load thumbnail %}
+	  	    <a href="{{ image.get_absolute_url }}">
+	  	      {% thumbnail image.photo "180x300" crop="100%" as im %}
+	  	      <img src="{{ im.url }}">
+	  	    </a>
+	  	  {% endthumbnail %}<br>
+	  	  <a href="{{ image.get_absolute_url }}">{{ image.title }}</a>
+	  	</div>
+	  </div>
+	{% endfor %}
+</div>
+
+
+{% endblock %}

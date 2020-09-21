@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+
+<br>
+
+<div class="card card-body">
+
+	<div class="row row-cols-2">
+	<div class="col">
+	{% if form.errors %}
+	 <p>The username or password is incorrect</p><br>
+	 
+	{% endif %}
+	<form action="." method="post">
+	  {% csrf_token %}
+
+	  {% for field in form %}
+	    <div>
+	      {{ field.label_tag }}<br>
+	      {{ field }}
+	      {{ field.errors }}
+	    </div>
+	  {% endfor %}
+	  <br>
+	  <input type="submit" value="Login" class="btn btn-success btn-sm">
+	  <input type="hidden" name="next" value="{{ next }}">
+	</form>
+	</div>
+	<div class="col">
+		<a href="{% url "social:begin" "google-oauth2" %}" class="btn btn-danger btn-sm">Login with google</a>
+	</div>
+	</div>
+</div>
+<br>
+<a href="{% url 'password_reset' %}" class="btn btn-warning btn-sm">Forgotton password?</a>
+
+{% endblock %}

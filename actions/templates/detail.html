@@ -1,0 +1,34 @@
+{% load thumbnail %}
+  {% thumbnail action.user.profile.image "80x80" crop="100%" as im %}
+  <a href="{{ action.user.get_absolute_url }}">
+    <img src="{{ im.url }}" class="rounded-circle">
+  </a>
+  {% endthumbnail %}
+
+  {% if action.target %}
+  	{% if action.target.photo %}
+  	{% load thumbnail %}
+    <a href="{{ action.target.get_absolute_url }}">
+      {% thumbnail action.target.photo "80x80" crop="100%" as im %}
+      <img src="{{ im.url }}">
+    </a>
+    {% endthumbnail %}
+    {% elif action.target.profile.image %}
+
+      {% load thumbnail %}
+        <a href="{{ action.target.get_absolute_url }}">
+          {% thumbnail action.target.profile.image "80x80" crop="100%" as im %}
+          <img src="{{ im.url }}" class="rounded-circle">
+        </a>
+      {% endthumbnail %}
+    {% endif %}
+  {% endif %}
+
+  
+
+
+<p class="text-muted">{{ action.created|timesince }} ago</p>
+<p><a href="{{ action.user.get_absolute_url }}">{{ action.user }}</a> {{ action.verb }} <a href="{{ action.target.get_absolute_url }}">{% if action.target == request.user %}You{% else %}{{ action.target }}{% endif %}</a></p>
+
+
+<hr>

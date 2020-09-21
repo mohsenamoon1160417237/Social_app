@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Dashboard</h1>
+ {% if request.user.profile.image %}
+ <br>
+ <div class="row row-cols-2">
+ 	<div class="col">
+ <a href="{{ request.user.profile.image.url }}">
+<img src="{{ request.user.profile.image.url }}" class="rounded-circle" width="150px" height="150px">
+</a>
+</div>
+<div class="col">
+	
+	<a href="{% if request.user.followers.count  > 0 %}{% url 'followers' %}{% else %} {% endif %}" class="badge-pill badge-primary">
+	  {{ request.user.followers.count }} Follower{{ request.user.followers.count|pluralize }}
+	</a>
+
+	
+	<a href="{% if request.user.following.count > 0 %}{% url 'followings' %}{% else %} {% endif %}" class="badge-pill badge-primary">
+	  {{ request.user.following.count }} Following
+	</a>
+</div>
+</div>
+<br>
+{% endif %}
+<br>
+<p>Welcome to your dashboard {{ request.user.username }}</p>
+<br>
+
+<a href="{% url 'password_change' %}" class="btn btn-warning btn-sm">Change password</a>
+<a href="{% url 'edit_profile' %}" class="btn btn-warning btn-sm">Edit your profile</a>
+<br><br>
+<hr>
+{% for action in actions %}
+  {% include 'detail.html' %}
+{% endfor %}<br>
+
+{% endblock %}

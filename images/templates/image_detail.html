@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ image.title }} | {{ request.user.username }}
+{% endblock %}
+
+
+{% block content %}
+
+<br>
+<h1>{{ image.title }}</h1><br>
+<div class="row rows-col-3">
+
+
+  <div class="col">
+    <a href="{{ image.photo.url }}">
+      <img class="img-fluid" src="{{ image.photo.url }}">
+    </a>
+    {% if request.user == image.user %}
+    <br><br>
+      <form action="{% url 'image_delete' image.id image.slug %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+      </form>
+    {% endif %}
+  </div>
+  <div class="col">
+    {% with total_likes=image.users_like.count users_like=image.users_like.all %}
+      
+      
+      <span class="count">
+        <span class="total">{{ total_likes }}</span>
+         Like{{ total_likes|pluralize }}
+      </span><br>
+      <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like badge-pill badge-primary">
+      	{% if request.user in users_like %}
+      	Unlike
+      	{% else %}
+      	Like
+      	{% endif %}
+      </a>
+    {% endwith %}<br><br>
+
+    <div class="image-likes">
+      <div class="row row-cols-4">
+      {% for user in image.users_like.all %}
+        <div class="row">
+          <div class="col">
+        <a href="{{ user.get_absolute_url }}"><img width="50" height="50" class="rounded-circle" src="{{ user.profile.image.url }}"></a>
+        <p class="text-sm">{{ user.first_name }}</p>
+      </div>
+    </div>
+      {% empty %}
+        <p class="text-muted">No users have liked this post yet.</p>
+      {% endfor %}</div><br><br>
+      <p>{{ image.description }}</p><br>
+    </div>
+    <br>
+  </div>
+</div>
+<br>
+
+
+{% endblock %}
+
+{% block domready %}
+	
+	$('a.like').click(function(event){
+
+		event.preventDefault();
+
+		$.post('{% url 'image_like' %}' , {
+
+			id : $(this).data('id'),
+			action : $(this).data('action')
+		} , function(data){
+
+			var previous_action = $('a.like').data('action');
+
+			$('a.like').data('action' , previous_action == 'like' ? 'unlike' : 'like');
+			$('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+			var previous_likes = parseInt($('span.total').text());
+
+			$('span.total').text(previous_action == 'like' ? previous_likes+1 : previous_likes-1);
+		});
+
+	});
+{% endblock %}
+
+
+
+
+
+
